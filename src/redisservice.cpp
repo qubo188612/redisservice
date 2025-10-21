@@ -4,17 +4,16 @@
 #include <sw/redis++/redis++.h>
 using namespace sw::redis;
 
+class redisserviceParam
+{
+public:
+	redisserviceParam() {};
+	~redisserviceParam() {};
+
+	Redis *redis;
+};
+
 namespace Redisservice {
-
-	class redisserviceParam
-	{
-	public:
-		redisserviceParam() {};
-		~redisserviceParam() {};
-
-		Redis *redis;
-	};
-
 	redisservice *redisservice::instance()
 	{
 		static redisservice obj;
@@ -75,59 +74,72 @@ namespace Redisservice {
 		}
 		return rc;
 	}
+}
 
-	double redisType::toDouble()
+double redisType::toDouble()
+{
+	double rc;
+	if (s_value.empty())
 	{
-		double rc;
-		if (s_value.empty())
+		rc = 0;
+	}
+	else
+	{
+		rc = std::stod(s_value);
+	}
+	return rc;
+}
+
+int redisType::toInt()
+{
+	int rc;
+	if (s_value.empty())
+	{
+		rc = 0;
+	}
+	else
+	{
+		rc = std::stoi(s_value);
+	}
+	return rc;
+}
+
+std::string redisType::toString()
+{
+	return s_value;
+}
+
+bool redisType::toBool()
+{
+	bool rc = false;
+	if (s_value.empty())
+	{
+		rc = false;
+	}
+	else
+	{
+		if (s_value == "true" || s_value == "TRUE" || s_value == "True")
 		{
-			rc = 0;
+			rc = true;
 		}
 		else
-		{
-			rc = std::stod(s_value);
-		}
-		return rc;
-	}
-
-	int redisType::toInt()
-	{
-		int rc;
-		if (s_value.empty())
-		{
-			rc = 0;
-		}
-		else
-		{
-			rc = std::stoi(s_value);
-		}
-		return rc;
-	}
-
-	std::string redisType::toString()
-	{
-		return s_value;
-	}
-
-	bool redisType::toBool()
-	{
-		bool rc = false;
-		if (s_value.empty())
 		{
 			rc = false;
 		}
-		else
-		{
-			if (s_value == "true" || s_value == "TRUE" || s_value == "True")
-			{
-				rc = true;
-			}
-			else
-			{
-				rc = false;
-			}
-		}
-		return rc;
 	}
+	return rc;
+}
 
+bool redisType::isNull()
+{
+	bool rc;
+	if (s_value.empty())
+	{
+		rc = true;
+	}
+	else
+	{
+		rc = false;
+	}
+	return rc;
 }

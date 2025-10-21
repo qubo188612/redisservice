@@ -5,23 +5,24 @@
 #include "dataStructure.h"
 #include <vector>
 
+class redisserviceParam;
+
+class DLL_CLASSEXP redisType
+{
+public:
+	redisType() {};
+	~redisType() {};
+	void setvalue(std::string str) { s_value = str; };
+	double toDouble();
+	int toInt();
+	std::string toString();
+	bool toBool();
+	bool isNull();
+private:
+	std::string s_value;
+};
+
 namespace Redisservice {
-
-	class redisserviceParam;
-
-	class DLL_CLASSEXP redisType
-	{
-	public:
-		redisType() {};
-		~redisType() {};
-		void setvalue(std::string str) { s_value = str; };
-		double toDouble();
-		int toInt();
-		std::string toString();
-		bool toBool();
-	private:
-		std::string s_value;
-	};
 
 	class DLL_CLASSEXP redisservice
 	{
@@ -43,4 +44,4 @@ namespace Redisservice {
 
 }
 
-#define ReidsCmd Redisservice::redisservice::instance();
+#define ReidsCmd Redisservice::redisservice::instance()
