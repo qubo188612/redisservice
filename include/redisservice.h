@@ -5,39 +5,42 @@
 #include "dataStructure.h"
 #include <vector>
 
-class redisserviceParam;
+namespace Redisservice {
 
-class DLL_CLASSEXP redisType
-{
-public:
-	redisType() {};
-	~redisType() {};
-	void setvalue(std::string str) { s_value = str; };
+	class redisserviceParam;
 
+	class DLL_CLASSEXP redisType
+	{
+	public:
+		redisType() {};
+		~redisType() {};
+		void setvalue(std::string str) { s_value = str; };
+		double toDouble();
+		int toInt();
+		std::string toString();
+		bool toBool();
+	private:
+		std::string s_value;
+	};
 
-	double toDouble();
-	int toInt();
-	std::string toString();
-	bool toBool();
-private:
-	std::string s_value;
-};
+	class DLL_CLASSEXP redisservice
+	{
+	public:
+		static redisservice *instance();
 
-class DLL_CLASSEXP redisservice
-{
-public:
-	static redisservice *instance();
+		void setValue(const char *key, const char *value);
+		void setValue(const char *key, int value);
+		void setValue(const char *key, double value);
+		void setValue(const char *key, bool value);
 
-	void setValue(const char *key,const char *value);
-	void setValue(const char *key,int value);
-	void setValue(const char *key,double value);
-	void setValue(const char *key,bool value);
+		redisType getValue(const char *key);
+	private:
+		redisservice();
+		~redisservice();
 
-	redisType getValue(const char *key);
-private:
-	redisservice();
-	~redisservice();
+		redisserviceParam *p;
+	};
 
-	redisserviceParam *p;
-};
+}
 
+#define ReidsCmd Redisservice::redisservice::instance();
